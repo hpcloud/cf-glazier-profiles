@@ -1,0 +1,3 @@
+[submodule "cf-glazier"]
+	path = cf-glazier
+	url = git@github.com:hpcloud/cf-glazier
