@@ -2,7 +2,7 @@ $resourcesDir = "$ENV:SystemDrive\glazier\profile"
 
 $zmqInstaller = Join-Path $resourcesDir "zmq-installer.exe"
 $gitInstaller = Join-Path $resourcesDir "git-installer.exe"
-$vs2013BuildToolsInstaller = Join-Path $resourcesDir "vs2012bt-installer.exe"
+$webTargetsZip = Join-Path $resourcesDir "web-targets"
 
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
@@ -39,22 +39,46 @@ function InstallZMQ()
   }
 }
 
-function InstallVSBuildTools()
+function InstallWebTargets($version)
 {
-  Write-Output "Installing VS2013 Build Tools ..."
+  Write-Output "Extracting Web targets ..."
 
-  $installVSBTProcess = Start-Process -Wait -PassThru -NoNewWindow $vs2013BuildToolsInstaller "/Q"
+  $guid = [guid]::NewGuid()
 
-  if ($installVSBTProcess.ExitCode -ne 0)
+  $extractPath = Join-Path $resourcesDir $guid
+
+  Write-Host $extractPath
+
+  New-Item $extractPath -type directory 
+  Expand-ZIPFile -file "${webTargetsZip}${version}.zip" -destination $extractPath
+
+  Write-Output "Installing Web targets"
+
+  $webTargetsPath = Join-Path $extractPath "tools\VSToolsPath"
+  $vsPath = "C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v${version}.0"
+  
+  if (-Not (Test-Path $vsPath))
   {
-    throw 'Failed to install VS2013 Build Tools.'
+    New-Item $vsPath -type directory
   }
-  else
-  {
-    Write-Output "[OK] VS2013 Build Tools installation was successful."
-  }
+
+  Copy-Item "${webTargetsPath}\*" -Destination $vsPath -Recurse -Force
+
+  Write-Output "[OK] Web targets succesfully installed."
+  
+}
+
+function Expand-ZIPFile($file, $destination)
+{
+    $shell = new-object -com shell.application
+    $zip = $shell.NameSpace($file)
+    foreach($item in $zip.items())
+    {
+        $shell.Namespace($destination).copyhere($item)
+    }
 }
 
 InstallGit
 InstallZMQ
-InstallVSBuildTools
+InstallWebTargets -version 11
+InstallWebTargets -version 12

@@ -1,4 +1,5 @@
 destination,url
 zmq-installer.exe,https://region-b.geo-1.objects.hpcloudsvc.com/v1/54026737306152/als-windows-extensions-prerequisites/windea/ZeroMQ-3.2.4~miru1.0-x64.exe
 git-installer.exe,https://region-b.geo-1.objects.hpcloudsvc.com/v1/54026737306152/als-windows-extensions-prerequisites/windea/Git-1.9.5-preview20141217.exe
-vs2012bt-installer.exe,https://region-b.geo-1.objects.hpcloudsvc.com/v1/54026737306152/als-windows-extensions-prerequisites/windea/BuildTools_Full.exe
+web-targets12.zip,https://api.nuget.org/packages/msbuild.microsoft.visualstudio.web.targets.12.0.4.nupkg
+web-targets11.zip,https://api.nuget.org/packages/msbuild.microsoft.visualstudio.web.targets.11.0.2.1.nupkg

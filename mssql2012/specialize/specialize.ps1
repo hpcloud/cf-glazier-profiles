@@ -4,6 +4,9 @@ $saPasswd = "INullPeer0000"
 
 $sqlServerExpressPath = Join-Path $resourcesDir "sqlexpr2012_x64.exe"
 
+$ErrorActionPreference = "Stop"
+$ProgressPreference = "SilentlyContinue"
+
 function ExtractSQLServer(){
     Write-Output "Extracting SQL Server Express 2012"
     $argList = "/q", "/x:${sqlServerExtractionPath}"
