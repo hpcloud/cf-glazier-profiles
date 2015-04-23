@@ -49,14 +49,14 @@ function InstallWebTargets($version)
 
   Write-Host $extractPath
 
-  New-Item $extractPath -type directory 
+  New-Item $extractPath -type directory
   Expand-ZIPFile -file "${webTargetsZip}${version}.zip" -destination $extractPath
 
   Write-Output "Installing Web targets"
 
   $webTargetsPath = Join-Path $extractPath "tools\VSToolsPath"
   $vsPath = "C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v${version}.0"
-  
+
   if (-Not (Test-Path $vsPath))
   {
     New-Item $vsPath -type directory
@@ -65,17 +65,14 @@ function InstallWebTargets($version)
   Copy-Item "${webTargetsPath}\*" -Destination $vsPath -Recurse -Force
 
   Write-Output "[OK] Web targets succesfully installed."
-  
+
 }
 
 function Expand-ZIPFile($file, $destination)
 {
-    $shell = new-object -com shell.application
-    $zip = $shell.NameSpace($file)
-    foreach($item in $zip.items())
-    {
-        $shell.Namespace($destination).copyhere($item)
-    }
+  $fileSystemAssemblyPath = Join-Path ([System.Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory()) 'System.IO.Compression.FileSystem.dll'
+  Add-Type -Path $fileSystemAssemblyPath
+  [System.IO.Compression.ZipFile]::ExtractToDirectory($file, $destination)
 }
 
 function SetupWinRM($port, $hostName)
