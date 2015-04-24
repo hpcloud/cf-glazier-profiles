@@ -133,6 +133,8 @@ function SetupStackatoUser()
   $group.add("WinNT://$username,user")
 }
 
+mkdir "$ENV:SystemRoot\glazier_image" -ErrorAction 'SilentlyContinue' | Out-Null
+
 ExtractSQLServer | Out-File "$ENV:WINDIR\glazier_image\sql_server_extract.log"
 InstallSqlServer | Out-File "$ENV:WINDIR\glazier_image\sql_server_install.log"
 EnableStaticPort | Out-File "$ENV:WINDIR\glazier_image\sql_server_static_port.log"
