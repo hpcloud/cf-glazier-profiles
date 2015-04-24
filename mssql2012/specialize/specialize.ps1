@@ -35,7 +35,7 @@ function InstallSqlServer()
     $sqlServerSetup = Join-Path $sqlServerExtractionPath "SETUP.EXE"
 
     Start-Process -Wait -PassThru -NoNewWindow $sqlServerSetup -ArgumentList $argList
-    
+
 
 	if ($installSQLServerProcess.ExitCode -gt 0)
 	{
@@ -133,10 +133,10 @@ function SetupStackatoUser()
   $group.add("WinNT://$username,user")
 }
 
-ExtractSQLServer
-InstallSqlServer
-EnableStaticPort
-EnableContainedDatabaseAuthentication
-AddSystemUser
-SetupWinRM 5986 '127.0.0.1'
-SetupStackatoUser
+ExtractSQLServer | Out-File "$ENV:WINDIR\glazier_image\sql_server_extract.log"
+InstallSqlServer | Out-File "$ENV:WINDIR\glazier_image\sql_server_install.log"
+EnableStaticPort | Out-File "$ENV:WINDIR\glazier_image\sql_server_static_port.log"
+EnableContainedDatabaseAuthentication | Out-File "$ENV:WINDIR\glazier_image\sql_server_contained_db.log"
+AddSystemUser | Out-File "$ENV:WINDIR\glazier_image\sql_server_system_user.log"
+SetupWinRM 5986 '127.0.0.1' | Out-File "$ENV:WINDIR\glazier_image\sql_server_winrm.log"
+SetupStackatoUser | Out-File "$ENV:WINDIR\glazier_image\sql_server_stackato_user.log"
