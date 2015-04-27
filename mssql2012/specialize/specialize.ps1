@@ -1,7 +1,7 @@
 $resourcesDir = "$ENV:SystemDrive\glazier\profile"
 $sqlServerExtractionPath = Join-Path $resourcesDir "extract"
 $saPasswd = "INullPeer0000"
-
+$sqlCmdBin = 'c:\Program Files\Microsoft SQL Server\110\Tools\Binn\sqlcmd.exe'
 $sqlServerExpressPath = Join-Path $resourcesDir "sqlexpr2012_x64.exe"
 
 $ErrorActionPreference = "Stop"
@@ -64,7 +64,7 @@ function EnableContainedDatabaseAuthentication()
 	Write-Output "Enable contained database authentication"
 
     $argList = "-S .\sqlexpress","-U sa", "-P ${saPasswd}", "-Q `"EXEC sp_configure `'contained database authentication`', 1; reconfigure;`""
-    $sqlCmdProcess = Start-Process -Wait -PassThru -NoNewWindow "SQLCmd" -ArgumentList $argList
+    $sqlCmdProcess = Start-Process -Wait -PassThru -NoNewWindow $sqlCmdBin -ArgumentList $argList
 
     if ($sqlCmdProcess.ExitCode -ne 0)
     {
@@ -80,7 +80,7 @@ function AddSystemUser()
 
     $argList = "-S .\sqlexpress","-U sa", "-P ${saPasswd}", "-Q `"ALTER SERVER ROLE [sysadmin] ADD MEMBER [NT AUTHORITY\SYSTEM];`""
 
-    $sqlCmdProcess = Start-Process -Wait -PassThru -NoNewWindow "SQLCmd" -ArgumentList $argList
+    $sqlCmdProcess = Start-Process -Wait -PassThru -NoNewWindow $sqlCmdBin -ArgumentList $argList
 
     if ($sqlCmdProcess.ExitCode -ne 0)
     {
@@ -133,12 +133,10 @@ function SetupStackatoUser()
   $group.add("WinNT://$username,user")
 }
 
-mkdir "$ENV:SystemRoot\glazier_image" -ErrorAction 'SilentlyContinue' | Out-Null
-
-ExtractSQLServer | Out-File "$ENV:WINDIR\glazier_image\sql_server_extract.log"
-InstallSqlServer | Out-File "$ENV:WINDIR\glazier_image\sql_server_install.log"
-EnableStaticPort | Out-File "$ENV:WINDIR\glazier_image\sql_server_static_port.log"
-EnableContainedDatabaseAuthentication | Out-File "$ENV:WINDIR\glazier_image\sql_server_contained_db.log"
-AddSystemUser | Out-File "$ENV:WINDIR\glazier_image\sql_server_system_user.log"
-SetupWinRM 5986 '127.0.0.1' | Out-File "$ENV:WINDIR\glazier_image\sql_server_winrm.log"
-SetupStackatoUser | Out-File "$ENV:WINDIR\glazier_image\sql_server_stackato_user.log"
+ExtractSQLServer
+InstallSqlServer
+EnableStaticPort
+EnableContainedDatabaseAuthentication
+AddSystemUser
+SetupWinRM 5986 '127.0.0.1'
+SetupStackatoUser

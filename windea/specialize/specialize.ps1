@@ -119,11 +119,9 @@ function SetupStackatoUser()
   $group.add("WinNT://$username,user")
 }
 
-mkdir "$ENV:SystemRoot\glazier_image" -ErrorAction 'SilentlyContinue' | Out-Null
-
-InstallGit | Out-File "$ENV:WINDIR\glazier_image\windea_install_git.log"
-InstallZMQ | Out-File "$ENV:WINDIR\glazier_image\windea_install_zmq.log"
-InstallWebTargets -version 11 | Out-File "$ENV:WINDIR\glazier_image\windea_install_web_targets11.log"
-InstallWebTargets -version 12 | Out-File "$ENV:WINDIR\glazier_image\windea_install_web_targets12.log"
-SetupWinRM 5986 '127.0.0.1' | Out-File "$ENV:WINDIR\glazier_image\windea_winrm.log"
-SetupStackatoUser | Out-File "$ENV:WINDIR\glazier_image\windea_stackato_user.log"
+InstallGit
+InstallZMQ
+InstallWebTargets -version 11
+InstallWebTargets -version 12
+SetupWinRM 5986 '127.0.0.1'
+SetupStackatoUser
