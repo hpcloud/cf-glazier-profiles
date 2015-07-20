@@ -3,9 +3,26 @@ $sqlServerExtractionPath = Join-Path $resourcesDir "extract"
 $saPasswd = "INullPeer0000"
 $sqlCmdBin = 'c:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\sqlcmd.exe'
 $sqlServerExpressPath = Join-Path $resourcesDir "sqlexpr2014_x64.exe"
+$zmqInstaller = Join-Path $resourcesDir "zmq-installer.exe"
 
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
+
+function InstallZMQ()
+{
+  Write-Output "Installing ZeroMQ ..."
+
+  $installZMQProcess = Start-Process -Wait -PassThru -NoNewWindow $zmqInstaller "/S /D=c:\zmq"
+
+  if ($installZMQProcess.ExitCode -ne 0)
+  {
+    throw 'Failed to install ZeroMQ.'
+  }
+  else
+  {
+    Write-Output "[OK] ZeroMQ installation was successful."
+  }
+}
 
 function ExtractSQLServer(){
     Write-Output "Extracting SQL Server Express 2014"
@@ -133,6 +150,7 @@ function SetupStackatoUser()
   $group.add("WinNT://$username,user")
 }
 
+InstallZMQ
 ExtractSQLServer
 InstallSqlServer
 EnableStaticPort
