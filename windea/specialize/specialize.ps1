@@ -10,6 +10,12 @@ $ProgressPreference = "SilentlyContinue"
 function InstallGit()
 {
   Write-Output "Installing git ..."
+  $gitPath = "C:\Program Files (x86)\Git\bin"
+
+  If (Test-Path $gitPath){
+     Write-Output "[OK] git installed on system skipping ..."
+     return 
+  }
 
   $installGitProcess = Start-Process -Wait -PassThru -NoNewWindow $gitInstaller "/silent"
 
@@ -26,6 +32,13 @@ function InstallGit()
 function InstallZMQ()
 {
   Write-Output "Installing ZeroMQ ..."
+  # check if zmq libraries are available
+  $zmqExists = (Start-Process -FilePath 'cmd.exe' -ArgumentList '/c where libzmq-v120-mt-3_2_4.dll' -Wait -Passthru -NoNewWindow).ExitCode
+
+  if ($zmqExists -eq 0) {
+    Write-Output "zmq installed on system" -ForegroundColor Green
+    return
+  }
 
   $installZMQProcess = Start-Process -Wait -PassThru -NoNewWindow $zmqInstaller "/S /D=c:\zmq"
 
@@ -42,12 +55,17 @@ function InstallZMQ()
 function InstallWebTargets($version)
 {
   Write-Output "Extracting Web targets ..."
+  $vsPath = "C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v${version}.0"
+
+  $toolsPath = Join-Path $vsPath "WebApplications"
+  if (Test-Path $toolsPath) {
+    Write-Output "[OK] Visual Studio web targets version '${version}' exist. Skipping ..."
+    return
+  }
 
   $guid = [guid]::NewGuid()
 
   $extractPath = Join-Path $resourcesDir $guid
-
-  Write-Host $extractPath
 
   New-Item $extractPath -type directory
   Expand-ZIPFile -file "${webTargetsZip}${version}.zip" -destination $extractPath
@@ -55,7 +73,7 @@ function InstallWebTargets($version)
   Write-Output "Installing Web targets"
 
   $webTargetsPath = Join-Path $extractPath "tools\VSToolsPath"
-  $vsPath = "C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v${version}.0"
+
 
   if (-Not (Test-Path $vsPath))
   {
@@ -105,6 +123,14 @@ function SetupStackatoUser()
   $username = "stackato"
 
   $Computer = [ADSI]"WinNT://$computername,Computer"
+
+  $localUsers = $Computer.Children | where {$_.SchemaClassName -eq 'user'}  | foreach { $_.name[0].tostring() }
+  
+  if($localUsers -contains $username) {
+    Write-Output "'${username}' user exists, skipping ..."    
+    return
+  }
+
   $LocalAdmin = $Computer.Create("User", $username)
   $LocalAdmin.SetPassword("St@ckato")
   $LocalAdmin.SetInfo()
