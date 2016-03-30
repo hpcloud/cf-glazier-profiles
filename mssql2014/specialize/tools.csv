@@ -1,3 +1,3 @@
 destination,url
-zmq-installer.exe,https://api.mpce.hpelabs.net:8080/v1/AUTH_7b52c1fb73ad4568bbf5e90bead84e21/glazier-dependencies/ZeroMQ-3.2.4-miru1.0-x64.exe
+zmq-installer.exe,https://s3-us-west-1.amazonaws.com/clients.als.hpcloud.com/windows/glazier-dependencies/ZeroMQ-3.2.4-miru1.0-x64.exe
 sqlexpr2014_x64.exe,http://download.microsoft.com/download/E/A/E/EAE6F7FC-767A-4038-A954-49B8B05D04EB/Express%2064BIT/SQLEXPR_x64_ENU.exe

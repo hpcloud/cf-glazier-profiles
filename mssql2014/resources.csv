@@ -1,4 +1,4 @@
 path,uri
-\als_installers\cf-mssql-broker.zip,https://api.mpce.hpelabs.net:8080/v1/AUTH_7b52c1fb73ad4568bbf5e90bead84e21/cf-mssql-broker-artifacts/release-3-2015-09-08_09-23-46%2Fcf-mssql-broker.zip
-\als_installers\cf-logyard-installers.zip,https://api.mpce.hpelabs.net:8080/v1/AUTH_7b52c1fb73ad4568bbf5e90bead84e21/cf-logyard-artifacts/11-2015-04-30_21-15-41/cf-logyard-installers.zip
-\als_installers\cf-windows-supervisord.zip,https://api.mpce.hpelabs.net:8080/v1/AUTH_7b52c1fb73ad4568bbf5e90bead84e21/cf-windows-supervisord-artifacts/24-2015-04-06_09-53-17/cf-windows-supervisord.zip
+\als_installers\cf-mssql-broker.zip,https://s3-us-west-1.amazonaws.com/clients.als.hpcloud.com/windows/cf-mssql-broker-artifacts/release-3-2015-09-08_09-23-46/cf-mssql-broker.zip
+\als_installers\cf-logyard-installers.zip,https://s3-us-west-1.amazonaws.com/clients.als.hpcloud.com/windows/cf-logyard-artifacts/11-2015-04-30_21-15-41/cf-logyard-installers.zip
+\als_installers\cf-windows-supervisord.zip,https://s3-us-west-1.amazonaws.com/clients.als.hpcloud.com/windows/cf-windows-supervisord-artifacts/24-2015-04-06_09-53-17/cf-windows-supervisord.zip
